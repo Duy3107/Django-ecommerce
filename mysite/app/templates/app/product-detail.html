@@ -1,0 +1,417 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block product-detail %}
+<style>
+    .featured {
+        text-align: center;
+        font-weight: bold;
+        margin: 30px 0px 30px 0px;
+        padding: 15px;
+        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+        color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        font-family: 'Raleway', sans-serif;
+    }
+</style>
+
+<!-- Begin Product Detail -->
+{% if san_pham != None %}
+<section id="single-product" style="margin-top: 140px;">
+    <div class="product-container">
+        <div class="product-images">
+            <img src="{{san_pham.ImageURL}}" alt="Main Product Image" class="main-image" onclick="zoomImage(this)">
+            <div class="thumbnail-images">
+                <img src="{{san_pham.hinh_phu_1.url}}" alt="Thumbnail 1" onclick="changeMainImage(this)">
+                <img src="{{san_pham.hinh_phu_2.url}}" alt="Thumbnail 2" onclick="changeMainImage(this)">
+                <img src="{{san_pham.hinh_phu_3.url}}" alt="Thumbnail 3" onclick="changeMainImage(this)">
+                <img src="{{san_pham.hinh_phu_4.url}}" alt="Thumbnail 4" onclick="changeMainImage(this)">
+            </div>
+        </div>
+
+        <div class="product-details">
+            <h1 class="product-name">{{san_pham.ten}}</h1>
+            {% if san_pham.khuyen_mai == True %}
+            <p class="price">{{san_pham.gia_km}} đ</p>
+            {% else %}
+            <p class="price">{{san_pham.gia}} đ</p>
+            {% endif %}
+            <p class="availability">Tình trạng: <span class="in-stock">Còn hàng</span></p>
+            <br>
+            <label for="size" style="font-weight: bold;">Size:</label>
+            <select id="size" name="size">
+                <option value="37" selected>37</option>
+                <option value="38">38</option>
+                <option value="39">39</option>
+                <option value="40">40</option>
+                <option value="41">41</option>
+                <option value="42">42</option>
+                <option value="43">43</option>
+                <option value="44">44</option>
+                <option value="45">45</option>
+            </select>
+            <div class="quantity-container">
+                <label for="quantity" style="font-weight: bold;">Số Lượng:</label>
+                <input type="number" id="quantity" name="quantity" min="1" max="10" value="1">
+            </div>
+            <div class="size-instruction">
+                Kích Thước: <a href="#" id="size-chart-link">(Xem Bảng Size)</a>
+            </div>
+            <div class="button-container">
+                <button class="add-to-cart" data-sanphamid="{{san_pham.id}}" type="button">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    Thêm Vào Giỏ
+                </button>
+                <button class="buy-now" data-sanphamid="{{san_pham.id}}"><i class="fa-solid fa-money-bill"></i>
+                    Mua Ngay
+                </button>
+            </div>
+            <div class="service">
+                <ul class="list-service">
+
+
+                    <li><img class="dt-width-auto"
+                            src="//theme.hstatic.net/1000230642/1001205219/14/service_ic_1.png?v=683">Cam kết chính
+                        hãng Ricons Shoe Store 100%</li>
+
+
+                    <li><img class="dt-width-auto"
+                            src="//theme.hstatic.net/1000230642/1001205219/14/service_ic_2.png?v=683">Bảo hành 06
+                        tháng (<a href="https://bitis.com.vn/pages/chinh-sach-bao-hanh">click xem chi tiết</a>)</li>
+
+
+                    <li><img class="dt-width-auto"
+                            src="//theme.hstatic.net/1000230642/1001205219/14/service_ic_3.png?v=683">Đổi size trong
+                        vòng 7 ngày (<a href="https://bitis.com.vn/pages/chinh-sach-doi-size">click xem chi
+                            tiết</a>)</li>
+
+
+                    <li><img class="dt-width-auto"
+                            src="//theme.hstatic.net/1000230642/1001205219/14/service_ic_4.png?v=683">Đổi trả hàng
+                        trong vòng 7 ngày (<a href="https://bitis.com.vn/pages/chinh-sach-doi-tra">click xem chi
+                            tiết</a>)</li>
+
+
+                    <li><img class="dt-width-auto"
+                            src="//theme.hstatic.net/1000230642/1001205219/14/service_ic_5.png?v=683">Free ship đơn
+                        hàng 1.5 Triệu</li>
+
+
+                    <li><img class="dt-width-auto"
+                            src="//theme.hstatic.net/1000230642/1001205219/14/service_ic_6.png?v=683">Hỗ trợ giao
+                        hàng 2h khi chọn hình thức vận chuyển Grab. Áp dụng khu vực HCM T2 - T7 (8H00 - 11H00 và
+                        14H00 - 16H00)</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <div class="popup" id="size-chart-popup">
+        <span class="close" id="close-popup">&times;</span>
+        <img src="{% static 'images/size.webp' %}" alt="Size Chart">
+    </div>
+</section>
+<section class="single-product-info">
+    <h1>Mô tả sản phẩm</h1>
+    <!-- Viết Mô tả  -->
+    <p>
+        {{ san_pham.mo_ta|safe }}
+    </p>
+    <!--  -->
+</section>
+<!-- End Product Detail -->
+{% endif %}
+<div class="review-section">
+    <div class="overall-rating">
+        <h1>4.8/5</h1>
+        <div class="stars">
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+            <span class="star">&#9733;</span>
+        </div>
+        <p>98 lượt đánh giá</p>
+        <button>Viết đánh giá</button>
+        <div class="rating-distribution">
+            <div class="rating-bar">
+                <span>5 stars</span>
+                <div class="bar">
+                    <div class="filled" style="width: 78%;"></div>
+                </div>
+                <span>78</span>
+            </div>
+            <div class="rating-bar">
+                <span>4 stars</span>
+                <div class="bar">
+                    <div class="filled" style="width: 20%;"></div>
+                </div>
+                <span>20</span>
+            </div>
+            <div class="rating-bar">
+                <span>3 stars</span>
+                <div class="bar">
+                    <div class="filled" style="width: 0%;"></div>
+                </div>
+                <span>0</span>
+            </div>
+            <div class="rating-bar">
+                <span>2 stars</span>
+                <div class="bar">
+                    <div class="filled" style="width: 0%;"></div>
+                </div>
+                <span>0</span>
+            </div>
+            <div class="rating-bar">
+                <span>1 star</span>
+                <div class="bar">
+                    <div class="filled" style="width: 0%;"></div>
+                </div>
+                <span>0</span>
+            </div>
+        </div>
+    </div>
+    <div class="individual-reviews">
+        <div class="review">
+            <p><strong>htiten3010</strong> <span>Đã mua hàng</span> | <span
+                    class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> | <span>19/07/2023, 09:27:01</span></p>
+            <p>Giày đẹp, đóng gói chắc chắn và cẩn thận. Giày nhẹ, thích hợp chơi thể thao</p>
+        </div>
+        <div class="review">
+            <p><strong>Loi12002</strong> <span>Đã mua hàng</span> | <span
+                    class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> | <span>19/07/2023, 02:27:01</span></p>
+            <p>Giày mang ok, Giao hàng rất nhanh vừa đặt hôm qua nay đã có</p>
+            <div class="review-images">
+
+            </div>
+        </div>
+        <div class="review">
+            <p><strong>Loi12002</strong> <span>Đã mua hàng</span> | <span
+                    class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> | <span>19/07/2023, 02:27:01</span></p>
+            <p>Giày mang ok, Giao hàng rất nhanh vừa đặt hôm qua nay đã có</p>
+            <div class="review-images">
+
+            </div>
+        </div>
+        <div class="review">
+            <p><strong>Loi12002</strong> <span>Đã mua hàng</span> | <span
+                    class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> | <span>19/07/2023, 02:27:01</span></p>
+            <p>Giày mang ok, Giao hàng rất nhanh vừa đặt hôm qua nay đã có</p>
+            <div class="review-images">
+
+            </div>
+        </div>
+        <div class="review">
+            <p><strong>Loi12002</strong> <span>Đã mua hàng</span> | <span
+                    class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> | <span>19/07/2023, 02:27:01</span></p>
+            <p>Giày mang ok, Giao hàng rất nhanh vừa đặt hôm qua nay đã có</p>
+            <div class="review-images">
+
+            </div>
+        </div>
+        <!-- Additional reviews can be added here similarly -->
+    </div>
+</div>
+<img style="max-width: 100%;" src="{% static 'images/rions-banner.webp'%}" alt="">
+<h1 class="featured" style="text-align: center; font-weight: bold; margin: 30px;">
+    ---- Có Thể Bạn Cũng Quan Tâm ----
+</h1>
+<!-- Begin Products -->
+<section class="products">
+    <div class="product-card-container">
+        <div class="product-items">
+            {% for sanpham in random_san_pham_list %}
+            <!-- single product -->
+            <div class="product">
+                <div class="product-content">
+                    <div class="product-img">
+                        <img src="{{sanpham.ImageURL}}" alt="product image">
+                    </div>
+                    <div class="product-btns">
+                        <button type="button" class="btn-cart" data-sanphamid="{{sanpham.id}}">
+                            Thêm vào giỏ
+                            <span><i class="fas fa-plus"></i></span>
+                        </button>
+                        <button type="button" class="btn-buy"
+                            onclick="window.location.href='/product_detail/{{sanpham.id}}'">
+                            Xem sản phẩm
+                            <span><i class="fas fa-shopping-cart"></i></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="product-info">
+                    <div class="product-info-top">
+                        <h2 class="sm-title">Ricons Shoes Store</h2>
+                        <div class="rating">
+                            <span><i class="fas fa-star"></i></span>
+                            <span><i class="fas fa-star"></i></span>
+                            <span><i class="fas fa-star"></i></span>
+                            <span><i class="fas fa-star"></i></span>
+                            <span><i class="fas fa-star"></i></span>
+                        </div>
+                    </div>
+                    <a href="#" class="product-name">{{sanpham.ten}}</a>
+                    <div class="product- price-container">
+                        {% if sanpham.khuyen_mai == True %}
+                        <strike class="product-price">{{sanpham.gia}}</strike>
+                        <p class="product-price">{{ sanpham.gia_km}} đ</p>
+                        {% else %}
+                        <p class="product-price">{{sanpham.gia}} đ</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if sanpham.khuyen_mai == True %}
+                <div class="off-info">
+                    <h2 class="sm-title">Giảm 10%</h2>
+                </div>
+                {% endif %}
+            </div>
+            <!-- end of single product -->
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<!-- End Products -->
+
+<!-- Begin Ajax của thêm vào giỏ hàng  -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.add-to-cart').click(function () {
+            var san_pham_id = $(this).data('sanphamid');
+            var so_luong = 1;
+            var kich_thuoc = $('#size').val();
+            $.ajax({
+                type: 'POST',
+                url: '{% url "them_vao_gio_hang" %}',
+                data: {
+                    'san_pham_id': san_pham_id,
+                    'so_luong': so_luong,
+                    'kich_thuoc': kich_thuoc,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.success) {
+                        alert('Sản phẩm đã được thêm vào giỏ hàng!');
+                    } else {
+                        alert('Đã xảy ra lỗi khi thêm vào giỏ hàng!');
+                    }
+                }
+            });
+        });
+    });
+</script>
+<!-- End Ajax của thêm vào giỏ hàng  -->
+
+<!-- Begin Ajax của mua ngay (nó cũng y chang cái thêm vào giỏ hàng thôi. nhưng mà nếu nhấn mua ngay thì nó sẽ chuyển đến trang giỏ hàng luôn)  -->
+<script>
+    $(document).ready(function () {
+        $('.buy-now').click(function () {
+            var san_pham_id = $(this).data('sanphamid');
+            var so_luong = 1;
+            var kich_thuoc = $('#size').val();
+            $.ajax({
+                type: 'POST',
+                url: '{% url "them_vao_gio_hang" %}',
+                data: {
+                    'san_pham_id': san_pham_id,
+                    'so_luong': so_luong,
+                    'kich_thuoc': kich_thuoc,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.success) {
+                        window.location.href = '/cart/';
+                    } else {
+                        alert('Đã xảy ra lỗi khi thêm vào giỏ hàng!');
+                    }
+                }
+            });
+        });
+    });
+</script>
+<!-- End Ajax của mua ngay (nó cũng y chang cái thêm vào giỏ hàng thôi. nhưng mà nếu nhấn mua ngay thì nó sẽ chuyển đến trang giỏ hàng luôn)  -->
+
+
+<!-- Begin Ajax của thêm vào giỏ hàng nhưng mà là của cái nút thêm vào giỏ hàng ở chõ Có thể bạn cũng quan tâm -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.btn-cart').click(function () {
+            var san_pham_id = $(this).data('sanphamid');
+            var so_luong = 1;
+            $.ajax({
+                type: 'POST',
+                url: '{% url "them_vao_gio_hang" %}',
+                data: {
+                    'san_pham_id': san_pham_id,
+                    'so_luong': so_luong,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.success) {
+                        alert('Sản phẩm đã được thêm vào giỏ hàng!');
+                    } else {
+                        alert('Đã xảy ra lỗi khi thêm vào giỏ hàng!');
+                    }
+                }
+            });
+        });
+    });
+</script>
+<!-- End Ajax của thêm vào giỏ hàng nhưng mà là của cái nút thêm vào giỏ hàng ở chõ Có thể bạn cũng quan tâm -->
+
+
+
+
+<!-- JS xử lý zoom hình và thay đổi hình  -->
+<script>
+
+    document.getElementById('size-chart-link').addEventListener('click', function (event) {
+        event.preventDefault();
+        document.getElementById('size-chart-popup').style.display = 'flex';
+        document.querySelector('.product-container').classList.add('blur');
+    });
+
+    document.getElementById('close-popup').addEventListener('click', function () {
+        document.getElementById('size-chart-popup').style.display = 'none';
+        document.querySelector('.product-container').classList.remove('blur');
+    });
+
+    window.addEventListener('click', function (event) {
+        if (event.target == document.getElementById('size-chart-popup')) {
+            document.getElementById('size-chart-popup').style.display = 'none';
+            document.querySelector('.product-container').classList.remove('blur');
+        }
+    });
+    function zoomImage(image) {
+        var zoomedImage = document.createElement("img");
+        zoomedImage.src = image.src;
+        zoomedImage.alt = image.alt;
+        zoomedImage.classList.add("zoomed-image");
+
+        var overlay = document.createElement("div");
+        overlay.classList.add("overlay");
+        overlay.appendChild(zoomedImage);
+
+        overlay.addEventListener("click", function () {
+            overlay.remove();
+        });
+
+        document.body.appendChild(overlay);
+    }
+
+    function changeMainImage(thumbnail) {
+        var mainImage = document.querySelector(".main-image");
+        mainImage.src = thumbnail.src;
+        mainImage.alt = thumbnail.alt;
+    }
+
+</script>
+
+{% endblock product-detail %}
